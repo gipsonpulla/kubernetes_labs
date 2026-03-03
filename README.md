@@ -17,4 +17,29 @@ kubectl config set-context --current --namespace=challenge2
 
 #apply
 kubectl apply -f storage_pv.yaml
+kubectl apply -f storage_pvc.yaml
+kubectl get pv,pvc
+
+pslearner@ip-172-31-24-7:~$ kubectl get pv,pvc
+NAME                     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM               STORAGECLASS   REASON   AGE
+persistentvolume/my-pv   10Gi       RWO            Retain           Bound    challenge2/my-pvc   manual                  112s
+
+NAME                           STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+persistentvolumeclaim/my-pvc   Bound    my-pv    10Gi       RWO            manual         27s
+
+kubectl delete pod <POD-NAME>
+kubectl get pods
+
+minikube ssh
+tail /mnt/data/challenge2.log
+
+
+Here's a quick summary of what you have done:
+
+Created your first Persistent Volume (PV) and Persistent Volume Claim (PVC).
+
+Deployed an application that makes use of the volume to store persistent data - the one you don't want to lose after containers die. Remember containers are ephemeral in nature.
+
+Validated that the data was kept after the pod died.
+
 
