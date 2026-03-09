@@ -38,7 +38,7 @@ namespaces.
 
 
 # Create a Pod with Environment Variables as Configuration
-
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -53,6 +53,7 @@ spec:
 
 "A similar would apply to mysql image"
 
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -83,3 +84,81 @@ spec:
               value: "myhost"
           ports:
             - containerPort: 3306
+
+# Create a Multi-container Pod
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-container-pod
+  labels:
+    purpose: multi-containers
+spec:
+  containers:
+    - name: web-app
+      image: my-web-app:latest
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log
+
+    - name: log-sidecar
+      image: my-logging-sidecar:latest
+      volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log
+
+  volumes:
+    - name: shared-logs
+      emptyDir: {}
+
+kubectl apply -f multicontainer.yaml
+
+kubectl get pods
+
+kubectl exec -it multi-container-pod /bin/bash
+kubectl exec -it multi-container-pod -c web-app -- /bin/bash
+If we don’t know the YAML location and any container name, we can just describe the pod to see all the containers, or we can just run kubectl:
+kubectl get pods <POD_NAME_HERE> -o jsonpath='{.spec.containers[*].name}'
+kubectl get pods web-app -o jsonpath='{.spec.containers[*].name}'
+
+# Create a Pod with Resource Limits
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-pod
+  labels:
+    purpose: demonstrate-resource-limits
+spec:
+  containers:
+    - name: example-container
+      image: nginx
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+
+    - name: log-aggregator
+      image: log-aggregator:v1
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m" 
+
+# Apply a JSON Patch Operation
+
+[
+  {
+    "op": "replace",
+    "path": "/spec/replicas",
+    "value": 5
+  }
+]
