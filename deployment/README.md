@@ -42,42 +42,44 @@ namespaces.
 apiVersion: v1
 kind: Pod
 metadata:
-name: dependent-envars-demo
+  name: dependent-envars-demo
 spec:
-containers:
-- name: dependent-envars-demo
-image: nginx
-env:
-- name: SERVICE_PORT
-value: "8000"
-A similar would apply to mysql image
+  containers:
+    - name: dependent-envars-demo
+      image: nginx
+      env:
+        - name: SERVICE_PORT
+          value: "8000"
+
+"A similar would apply to mysql image"
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-name: mysql-deployment
+  name: mysql-deployment
 spec:
-replicas: 1
-selector:
-matchLabels:
-app: mysql
-template:
-metadata:
-labels:
-app: mysql
-spec:
-containers:
-- name: mysql
-image: mysql:5.7 # Use the desired MySQL version
-env:
-- name: MYSQL_ROOT_PASSWORD
-value: "myrootpw"
-- name: MYSQL_DATABASE
-value: "mydb"
-- name: MYSQL_USER
-value: "myuser"
-- name: MYSQL_PASSWORD
-value: "mypw"
-- name: MYSQL_HOST
-value: "myhost"
-ports:
-- containerPort: 3306
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.7 # Use the desired MySQL version
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "myrootpw"
+            - name: MYSQL_DATABASE
+              value: "mydb"
+            - name: MYSQL_USER
+              value: "myuser"
+            - name: MYSQL_PASSWORD
+              value: "mypw"
+            - name: MYSQL_HOST
+              value: "myhost"
+          ports:
+            - containerPort: 3306
