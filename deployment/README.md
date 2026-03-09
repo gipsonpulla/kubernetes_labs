@@ -38,7 +38,7 @@ namespaces.
 
 
 # Create a Pod with Environment Variables as Configuration
----
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -53,7 +53,7 @@ spec:
 
 "A similar would apply to mysql image"
 
----
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -86,7 +86,7 @@ spec:
             - containerPort: 3306
 
 # Create a Multi-container Pod
----
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -124,7 +124,7 @@ kubectl get pods <POD_NAME_HERE> -o jsonpath='{.spec.containers[*].name}'
 kubectl get pods web-app -o jsonpath='{.spec.containers[*].name}'
 
 # Create a Pod with Resource Limits
----
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -162,3 +162,6 @@ spec:
     "value": 5
   }
 ]
+kubectl patch deployment <deployment-name> --type='json' --patch-file=patch.json
+
+# Create Secrets
