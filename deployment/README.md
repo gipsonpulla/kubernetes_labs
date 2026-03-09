@@ -50,7 +50,7 @@ spec:
       env:
         - name: SERVICE_PORT
           value: "8000"
-
+```
 "A similar would apply to mysql image"
 
 ```yaml
@@ -84,6 +84,7 @@ spec:
               value: "myhost"
           ports:
             - containerPort: 3306
+```
 
 # Create a Multi-container Pod
 ```yaml
@@ -112,7 +113,7 @@ spec:
   volumes:
     - name: shared-logs
       emptyDir: {}
-
+```
 kubectl apply -f multicontainer.yaml
 
 kubectl get pods
@@ -152,6 +153,7 @@ spec:
         limits:
           memory: "128Mi"
           cpu: "500m" 
+```
 
 # Apply a JSON Patch Operation
 
