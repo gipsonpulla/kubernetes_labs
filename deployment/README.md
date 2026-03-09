@@ -119,9 +119,13 @@ kubectl apply -f multicontainer.yaml
 kubectl get pods
 
 kubectl exec -it multi-container-pod /bin/bash
+
 kubectl exec -it multi-container-pod -c web-app -- /bin/bash
+
 If we don’t know the YAML location and any container name, we can just describe the pod to see all the containers, or we can just run kubectl:
+
 kubectl get pods <POD_NAME_HERE> -o jsonpath='{.spec.containers[*].name}'
+
 kubectl get pods web-app -o jsonpath='{.spec.containers[*].name}'
 
 # Create a Pod with Resource Limits
@@ -167,3 +171,47 @@ spec:
 kubectl patch deployment <deployment-name> --type='json' --patch-file=patch.json
 
 # Create Secrets
+We can create a Kubernetes secret to store the database credentials.
+Let’s get the base64 encoded values of our username and password first.
+
+In Linux let’s run
+$ echo "myuser" | base64
+bXl1c2VyCg==
+$ echo "mypassword" | base64
+bXlwYXNzd29yZAo=
+
+secret.yaml
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+data:
+  username: bXl1c2VyCg==
+  password: bXlwYXNzd29yZAo=
+```
+
+kubectl apply -f secret.yaml.
+* Using Secrets in a Pod
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  containers:
+    - name: myapp-container
+      image: myapp:1.0
+      env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
+```
