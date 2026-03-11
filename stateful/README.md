@@ -75,3 +75,9 @@ POSTGRES_PASSWORD) are set for the initial database setup.
 • A volume (postgres-storage) is attached for persistent data storage.
 We need to create a PersistentVolumeClaim (PVC) named postgrespvc
 in our cluster for this to work.
+
+## Understanding Data Persistency on Kubernetes
+
+
+
+
